@@ -1,0 +1,12 @@
+﻿POS;NUMBER;LAP;TIME;GAP_FIRST;GAP_PREVIOUS;KPH; LAPS;TEAM;CLASS;GROUP;DIVISION;VEHICLE;TIRES;ECM Participant Id;ECM Team Id;ECM Category Id;ECM Car Id;ECM Brand Id;ECM Country Id;*Extra 7;*Extra 8;*Extra 9;Sort Key;DRIVER_FIRSTNAME;DRIVER_SECONDNAME;DRIVER_LICENSE;DRIVER_HOMETOWN;DRIVER_COUNTRY;DRIVER_SHORTNAME;DRIVER_ECM Driver Id;DRIVER_ECM Country Id;DRIVER_*Extra 3;DRIVER_*Extra 4;DRIVER_*Extra 5;
+1;22;6;1:10.486;-;-;127.4;7;Nissan Formula E Team;;B;;Nissan e-4ORCE 04;HANKOOK;;;;;;;;;;14;Oliver;ROWLAND;;GBR;GBR;ROW;;;;;;
+2;37;7;1:10.760;+0.274;+0.274;126.9;7;Jaguar TCS Racing;;B;;Jaguar I-TYPE 6;HANKOOK;;;;;;;;;;2;Nick;CASSIDY;;NZL;NZL;CAS;;;;;;
+3;5;3;1:10.847;+0.361;+0.087;126.8;7;NEOM McLaren Formula E Team;;B;;Nissan e-4ORCE 04;HANKOOK;;;;;;;;;;10;Jake;HUGHES;;GBR;GBR;HUG;;;;;;
+4;18;8;1:10.904;+0.418;+0.057;126.7;8;Maserati MSG Racing;;B;;Maserati Tipo Folgore;HANKOOK;;;;;;;;;;18;Jehan;DARUVALA;;IND;IND;DAR;;;;;;
+5;3;7;1:10.986;+0.500;+0.082;126.5;7;ERT Formula E Team;;B;;ERT X24;HANKOOK;;;;;;;;;;12;Sérgio;SETTE CÂMARA;;BRA;BRA;SET;;;;;;
+6;16;3;1:11.152;+0.666;+0.166;126.2;7;Envision Racing;;B;;Jaguar I-TYPE 6;HANKOOK;;;;;;;;;;6;Sébastien;BUEMI;;CHE;CHE;BUE;;;;;;
+7;8;3;1:11.165;+0.679;+0.013;126.2;8;NEOM McLaren Formula E Team;;B;;Nissan e-4ORCE 04;HANKOOK;;;;;;;;;;8;Sam;BIRD;;GBR;GBR;BIR;;;;;;
+8;1;3;1:11.228;+0.742;+0.063;126.1;7;Andretti Formula E;;B;;Porsche 99X Electric;HANKOOK;;;;;;;;;;4;Jake;DENNIS;;GBR;GBR;DEN;;;;;;
+9;51;4;1:11.368;+0.882;+0.140;125.9;7;ABT CUPRA FORMULA E TEAM;;B;;Mahindra M10Electro;HANKOOK;;;;;;;;;;20;Nico;MÜLLER;;CHE;CHE;MUE;;;;;;
+10;48;3;1:11.386;+0.900;+0.018;125.8;7;MAHINDRA RACING;;B;;Mahindra M10Electro;HANKOOK;;;;;;;;;;16;Edoardo;MORTARA;;CHE;CHE;MOR;;;;;;
+11;11;3;1:11.806;+1.320;+0.420;125.1;6;ABT CUPRA FORMULA E TEAM;;B;;Mahindra M10Electro;HANKOOK;;;;;;;;;;22;Lucas;DI GRASSI;;BRA;BRA;DIG;;;;;;

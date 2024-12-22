@@ -1,0 +1,251 @@
+# Season 11
+
+```{r R01-setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lubridate)
+library(ggdark)
+library(kableExtra)
+library(knitr)
+library(xfun)
+library(bookdown)
+library(png)
+library(grid)
+library(scales)
+library(Rcpp)
+library(magick)
+library(cowplot)
+library(directlabels)
+
+source("formulae2025fct.R")
+source("season11_data.R")
+
+wm <- watermark_fct()
+
+team_name <- team_name_fct()
+team_color <- team_color_fct()
+race_data <- race_data_fct()
+sector_len_list <- sector_len_list_fct()
+```
+
+```{r read laps/results lapply}
+laps_read <- lapply(1:(NROW(race_data)),
+                    function(i) read_csv2(race_data$path_laps[i],
+                                          na = c("", "NA", "\\N")))
+
+result_read <- lapply(1:(NROW(race_data)),
+                    function(i) read_csv2(race_data$path_result[i],
+                                          na = c("", "NA", "\\N")))
+
+wdc_read <- lapply(1:(NROW(race_data)),
+                    function(i) read_csv2(race_data$path_wdc[i],
+                                          na = c("", "NA", "\\N")))
+```
+
+```{r data setup list}
+laps_pace_list <- lapply(1:(NROW(race_data)),
+                         function(i) laps_pace_fct(laps_read[[i]],
+                                                   result_read[[i]]))
+
+sectors_list <- lapply(1:(NROW(race_data)),
+                       function(i) sectors_fct(laps_pace_list[[i]],
+                                               sector_len_list$S1_len[i],
+                                               sector_len_list$S2_len[i],
+                                               sector_len_list$S3_len[i]))
+
+avg_lapgap_list <- lapply(1:(NROW(race_data)),
+                         function(i) avg_lapgap_rel_fct(laps_pace_list[[i]],
+                                                   'Driver', 'Race'))
+
+avg_lapgap_t_list <- lapply(1:(NROW(race_data)),
+                         function(i) avg_lapgap_rel_fct(laps_pace_list[[i]],
+                                                   'Team', 'Race'))
+
+avg_sectorgap_list <- lapply(1:(NROW(race_data)),
+                         function(i) avg_sectorgap_rel_t_fct(sectors_list[[i]]))
+
+wdc_points_list <- lapply(1:(NROW(race_data)),
+                         function(i) wdc_pts_fct(wdc_read[[i]]))
+```
+
+```{r daytimeplot list}
+daytimeplot_list <- lapply(1:(NROW(race_data)),
+                       function(i) daytimeplot_fct(laps_pace_list[[i]],
+                                               race_data$race_name[i]))
+
+file_name <- "Daytimeplot"
+lapply(1:(NROW(race_data)), 
+       function(i) formulae_draw_fct(daytimeplot_list[[i]],
+                                   race_data$folder_name[i],
+                                   race_data$round_number[i],
+                                   file_name,
+                                   race_data$race_name[i]))
+```
+
+```{r paceplot list}
+paceplot_list <- lapply(1:(NROW(race_data)),
+                       function(i) paceplot_fct(laps_pace_list[[i]],
+                                               race_data$race_name[i]))
+
+
+file_name = "AvgRacePaceBoxPlot"
+lapply(1:(NROW(race_data)), 
+       function(i) formulae_draw_fct(paceplot_list[[i]],
+                                   race_data$folder_name[i],
+                                   race_data$round_number[i],
+                                   file_name,
+                                   race_data$race_name[i]))
+```
+
+```{r violinplot list}
+violinplot_list <- lapply(1:(NROW(race_data)),
+                       function(i) violinplot_fct(laps_pace_list[[i]],
+                                               race_data$race_name[i]))
+
+file_name = "AvgRacePaceViolinPlot"
+lapply(1:(NROW(race_data)), 
+       function(i) formulae_draw_fct(violinplot_list[[i]],
+                                   race_data$folder_name[i],
+                                   race_data$round_number[i],
+                                   file_name,
+                                   race_data$race_name[i]))
+```
+
+```{r lapplot list driver}
+avg_lapplot_list <- lapply(1:(NROW(race_data)),
+                       function(i) avg_lapplot_rel_fct(avg_lapgap_list[[i]],
+                                               race_data$race_name[i],
+                                               'Driver'))
+
+file_name = "AvgRacePacePlotRel"
+lapply(1:(NROW(race_data)), 
+       function(i) formulae_draw_fct(avg_lapplot_list[[i]],
+                                   race_data$folder_name[i],
+                                   race_data$round_number[i],
+                                   file_name,
+                                   race_data$race_name[i]))
+```
+
+```{r lapplot list team}
+avg_lapplot_t_list <- lapply(1:(NROW(race_data)),
+                       function(i) avg_lapplot_rel_fct(avg_lapgap_t_list[[i]],
+                                               race_data$race_name[i],
+                                               'Team'))
+
+file_name = "AvgRacePacePlotRelTeam"
+lapply(1:(NROW(race_data)), 
+       function(i) formulae_draw_fct(avg_lapplot_t_list[[i]],
+                                   race_data$folder_name[i],
+                                   race_data$round_number[i],
+                                   file_name,
+                                   race_data$race_name[i]))
+```
+
+```{r sectorplot list}
+avg_sectorplot_list <- lapply(1:(NROW(race_data)),
+                       function(i) avg_sectorplot_t_fct(avg_sectorgap_list[[i]],
+                                               race_data$race_name[i]))
+
+file_name = "AvgSectorPacePlotRelTeam"
+lapply(1:(NROW(race_data)), 
+       function(i) formulae_draw_fct(avg_sectorplot_list[[i]],
+                                   race_data$folder_name[i],
+                                   race_data$round_number[i],
+                                   file_name,
+                                   race_data$race_name[i]))
+```
+
+```{r wdcplot list}
+wdcplot_list <- lapply(1:(NROW(race_data)),
+                       function(i) wdcplot_fct(wdc_read[[i]],
+                                               race_data$race_name[i]))
+
+
+file_name = "WDC"
+lapply(1:(NROW(race_data)), 
+       function(i) formulae_draw_fct(wdcplot_list[[i]],
+                                   race_data$folder_name[i],
+                                   race_data$round_number[i],
+                                   file_name,
+                                   race_data$race_name[i]))
+```
+
+# old code
+
+```{r Q16-data read, include=FALSE}
+Q16_laps_read_A <- read_csv2("data/Season10/R01_London2/23_R01 Analysis_Qualifying Group A.csv",
+na = c("", "NA", "\\N"))
+Q16_laps_read_A$GROUP <- c("A")
+
+Q16_laps_read_B <- read_csv2("data/Season10/R01_London2/23_R01 Analysis_Qualifying Group B.csv",
+na = c("", "NA", "\\N"))
+Q16_laps_read_B$GROUP <- c("B")
+
+Q16_result_read_A <- read_csv2("data/Season10/R01_London2/03_R01 Classification_Qualifying Group A.csv",
+na = c("", "NA", "\\N")) %>% 
+    rename_at('POS', ~'POSITION')
+
+Q16_result_read_B <- read_csv2("data/Season10/R01_London2/03_R01 Classification_Qualifying Group B.csv",
+na = c("", "NA", "\\N"))%>% 
+    rename_at('POS', ~'POSITION')
+```
+
+```{r Q16-data setup}
+Q16_laps_pace_A <- laps_pace_fct(Q16_laps_read_A, Q16_result_read_A, 'Quali')
+Q16_laps_pace_B <- laps_pace_fct(Q16_laps_read_B, Q16_result_read_B, 'Quali')
+Q16_laps_pace <- full_join(Q16_laps_pace_A, Q16_laps_pace_B)
+Q16_result_A <- result_fct(Q16_result_read_A)
+Q16_result_B <- result_fct(Q16_result_read_B)
+Q16_result <- full_join(Q16_result_A, Q16_result_B)
+
+Q16_avg_lapgap_rel <- avg_lapgap_rel_fct(Q16_laps_pace, 'Driver', 'Quali')
+Q16_avg_lapgap_rel_t <- avg_lapgap_rel_fct(Q16_laps_pace, 'Team', 'Quali')
+```
+
+## Championship Standings
+
+```{r wdc_plot}
+R01_wdcplot <- wdcplot_fct(R01_wdc_points, race_name)
+
+file_name = "WDC"
+formulae_draw_fct(R01_wdcplot, folder_name, round_number, file_name, race_name)
+```
+
+```{r wdc_full}
+R01_wdc_full <- R01_wdc_points[c('Name', 'Driver', 'NUMBER',
+                                 'Points', 'team')] %>%
+  rename_at('Points', ~'R01') %>%
+  arrange(NUMBER)
+```
+
+## Qualifying Pace Drivers
+
+```{r Q16-laptime-barplot-relative, fig.cap = "Relative Qualifying Pace Plot", fig.align="center"}
+Q16_lapplot_rel <- avg_lapplot_rel_fct(Q16_avg_lapgap_rel, race_name,
+                                       'Driver', 'Quali')
+
+file_name = "AvgQualifyingPacePlotRel"
+formulae_draw_fct(Q16_lapplot_rel, folder_name, round_number, file_name, race_name)
+```
+
+```{r Q16-group-laptime-dumbbellplot-relative, fig.cap = "Relative Qualifying Pace Plot Groups", fig.align="center"}
+Q16_dumbbellplot <- quali_dumbbellplot_fct(Q16_laps_pace, race_name)
+
+file_name = "QualifyingPacePlotDB"
+formulae_draw_fct(Q16_dumbbellplot, folder_name,
+                  round_number, file_name, race_name)
+```
+
+## Qualifying Pace Teams
+
+```{r Q16-avg-laptime-team, fig.cap = "Relative Qualifying Pace Plot", fig.align="center"}
+Q16_lapplot_t <- avg_lapplot_rel_fct(Q16_avg_lapgap_rel_t, race_name,
+                                     'Team', 'Quali')
+
+file_name = "AvgQualifyingPacePlotRelTeam"
+formulae_draw_fct(Q16_lapplot_t, folder_name, round_number, file_name, race_name)
+```
+
+```{r}
+
+```
